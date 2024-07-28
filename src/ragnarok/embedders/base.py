@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
-from ..config import EmbedderConfig
 
 class BaseEmbedder(ABC):
-    def __init__(self, config: EmbedderConfig):
+    def __init__(self, config: dict):
         self.config = config
 
     @abstractmethod
@@ -21,7 +20,7 @@ class BaseEmbedder(ABC):
 
     @classmethod
     @abstractmethod
-    def from_config(cls, config: EmbedderConfig) -> 'BaseEmbedder':
+    def from_config(cls, config: dict) -> 'BaseEmbedder':
         """
         Create an embedder instance from a configuration.
 

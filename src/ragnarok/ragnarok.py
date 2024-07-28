@@ -2,7 +2,7 @@ import os
 from typing import List, Optional, Tuple, Dict, Any, Callable
 from .config import RAGnarokConfig, EmbeddingConfig
 from .chunkers import get_chunker, ChunkOutput
-from .embedders import initialize_embedder
+from .embedders import get_embedder
 from .vectorstores import initialize_vectorstore
 from .extractors import get_extractor, ExtractorOutput
 
@@ -15,7 +15,7 @@ class RAGnarok:
         else:
             self.chunker = get_chunker(config.chunker.chunker_type, config.chunker.config)
 
-        self.embedder = initialize_embedder(config.embedder)
+        self.embedder = get_embedder(config.embedder)
         self.vectorstore = initialize_vectorstore(config.vectorstore)
 
     def extract(self, source: str) -> ExtractorOutput:

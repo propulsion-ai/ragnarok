@@ -8,13 +8,11 @@ class ChunkerConfig(BaseModel):
 
 class EmbedderConfig(BaseModel):
     embedder_type: str
-    openai_config: Optional[dict] = None
+    config: Optional[dict] = None
 
 class VectorStoreConfig(BaseModel):
     store_type: str
-    credentials: dict
-    collection_name: str
-    milvus_config: Optional[Dict[str, Any]] = None
+    config: Optional[Dict[str, Any]] = None
 
 class RAGnarokConfig(BaseModel):
     chunker: Union[ChunkerConfig, Callable[[str], List[str]]] = Field(
