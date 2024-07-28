@@ -1,14 +1,15 @@
 from pydantic import BaseModel, Field
-from typing import Optional, Callable
+from typing import Optional, Callable, Dict, Any
 
 class EmbedderConfig(BaseModel):
-    model_url: str
-    api_key: Optional[str] = None
+    embedder_type: str
+    openai_config: Optional[dict] = None
 
 class VectorStoreConfig(BaseModel):
     store_type: str
     credentials: dict
     collection_name: str
+    milvus_config: Optional[Dict[str, Any]] = None
 
 class RAGnarokConfig(BaseModel):
     chunker: Optional[Callable] = None
