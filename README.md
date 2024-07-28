@@ -6,6 +6,8 @@ def my_custom_chunker(text: str) -> List[str]:
     # Custom chunking logic here
     return chunks
 
+# chunker=ChunkerConfig(chunker_type="fixed_size", config={"chunk_size": 1000, "overlap": 100}),
+
 # Configure RAGnarok
 config = RAGnarokConfig(
     chunker=my_custom_chunker,  # Optional: Use custom chunker
