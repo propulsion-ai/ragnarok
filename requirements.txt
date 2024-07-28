@@ -1,1 +1,9 @@
 pydantic
+
+# For openai embeddings
+openai
+
+# For milvus-lite
+protobuf==3.20.0
+grpcio-tools
+pymilvus
