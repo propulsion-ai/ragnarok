@@ -3,7 +3,7 @@ from pymilvus import MilvusClient
 from ..config import VectorStoreConfig
 
 class MilvusVectorStore:
-    def __init__(self, config: VectorStoreConfig):
+    def __init__(self, config: dict):
         self.config = config
         self.milvus_config = config.milvus_config or {}
         
@@ -64,7 +64,7 @@ class MilvusVectorStore:
         return res
 
     @classmethod
-    def from_config(cls, config: VectorStoreConfig) -> 'MilvusVectorStore':
+    def from_config(cls, config: dict) -> 'MilvusVectorStore':
         return cls(config)
 
 # Example usage for URL-based connection:

@@ -10,10 +10,10 @@ class ModelEnum(Enum):
     text_embedding_ada_002 = "text-embedding-ada-002"
 
 class OpenAIEmbedder(BaseEmbedder):
-    def __init__(self, config: EmbedderConfig):
+    def __init__(self, config: dict):
         super().__init__(config)
-        self.client = OpenAI(api_key=config.openai_config.api_key)
-        self.model = ModelEnum(config.openai_config.embedder_model)
+        self.client = OpenAI(api_key=config.api_key)
+        self.model = ModelEnum(config.embedder_model)
 
     def embed(self, input_text: str) -> List[float]:
         response = self.client.embeddings.create(
@@ -23,7 +23,7 @@ class OpenAIEmbedder(BaseEmbedder):
         return response.data[0].embedding
 
     @classmethod
-    def from_config(cls, config: EmbedderConfig) -> 'OpenAIEmbedder':
+    def from_config(cls, config: dict) -> 'OpenAIEmbedder':
         return cls(config)
 
 # Example usage
