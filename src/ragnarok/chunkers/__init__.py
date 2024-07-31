@@ -1,5 +1,5 @@
 from .base import BaseChunker, ChunkOutput
-from .fixed_size import FixedSizeChunker, FixedSizeChunkerConfig
+from .fixed_size import FixedSizeChunker
 # from .semantic import SemanticChunker, SemanticChunkerConfig
 # from .hybrid import HybridChunker, HybridChunkerConfig
 
@@ -34,7 +34,6 @@ __all__ = [
     # 'ChunkerConfig',
     'ChunkOutput',
     'FixedSizeChunker',
-    'FixedSizeChunkerConfig',
     # 'SemanticChunker',
     # 'SemanticChunkerConfig',
     # 'HybridChunker',

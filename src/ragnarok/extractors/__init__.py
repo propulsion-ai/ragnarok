@@ -1,6 +1,6 @@
 from .base import BaseExtractor, ExtractorConfig, ExtractorOutput
-from .pdf import PDFExtractor, PDFExtractorConfig
-from .url import URLExtractor, URLExtractorConfig
+from .pdf import PDFExtractor
+from .url import URLExtractor
 # from .text import TextExtractor, TextExtractorConfig
 # from .image import ImageExtractor, ImageExtractorConfig
 # from .doc import DocExtractor, DocExtractorConfig
@@ -34,18 +34,14 @@ def get_extractor(source_type: str) -> BaseExtractor:
     if extractor_class is None:
         raise ValueError(f"No extractor available for source type: {source_type}")
     
-    # You might want to add configuration here if needed
-    config = ExtractorConfig()  # or use a specific config if needed
-    return extractor_class(config)
+    return extractor_class({})
 
 __all__ = [
     'BaseExtractor',
     'ExtractorConfig',
     'ExtractorOutput',
     'PDFExtractor',
-    'PDFExtractorConfig',
     'URLExtractor',
-    'URLExtractorConfig',
     # 'TextExtractor',
     # 'TextExtractorConfig',
     # 'ImageExtractor',
