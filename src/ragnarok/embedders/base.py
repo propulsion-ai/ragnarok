@@ -1,12 +1,18 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
+from pydantic import BaseModel
+
+class EmbeddingOutput(BaseModel):
+    vector: List[float]
+    text: str
+    metadata: Optional[dict] = None
 
 class BaseEmbedder(ABC):
     def __init__(self, config: dict):
         self.config = config
 
     @abstractmethod
-    def embed(self, texts: List[str]) -> List[List[float]]:
+    def embed(self, texts: List[str]) -> List[float]:
         """
         Embed a list of texts into a list of vector representations.
 

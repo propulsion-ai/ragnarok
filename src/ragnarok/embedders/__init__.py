@@ -1,4 +1,4 @@
-from .base import BaseEmbedder
+from .base import BaseEmbedder, EmbeddingOutput
 
 def get_embedder(embedder_type: str, config: dict) -> BaseEmbedder:
     if embedder_type == "openai":
@@ -13,4 +13,4 @@ def get_embedder(embedder_type: str, config: dict) -> BaseEmbedder:
     else:
         raise ValueError(f"Unknown embedder type: {embedder_type}")
 
-__all__ = ["BaseEmbedder", "get_embedder"]
+__all__ = ["BaseEmbedder", "get_embedder", "EmbeddingOutput"]

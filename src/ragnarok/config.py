@@ -26,8 +26,3 @@ class RAGnarokConfig(BaseModel):
     embedder: EmbedderConfig
     vectorstore: VectorStoreConfig
     crawler: CrawlingConfig = Field(default_factory=CrawlingConfig)
-
-class EmbeddingConfig(BaseModel):
-    vector: list[float]
-    text: str
-    metadata: Optional[dict] = None
