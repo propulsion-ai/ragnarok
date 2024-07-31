@@ -1,8 +1,8 @@
 import os
 from typing import List, Optional, Tuple, Dict, Any, Callable
-from .config import RAGnarokConfig, EmbeddingConfig
+from .config import RAGnarokConfig
 from .chunkers import get_chunker, ChunkOutput
-from .embedders import get_embedder
+from .embedders import get_embedder, EmbeddingOutput
 from .vectorstores import get_vectorstore
 from .extractors import get_extractor, ExtractorOutput
 from .utils import get_source_type
@@ -30,14 +30,19 @@ class RAGnarok:
             chunks = self.chunker.chunk(text)
         return [ChunkOutput(text=chunk, metadata=metadata) for chunk in chunks]
 
-    def embed(self, chunks: List[ChunkOutput]) -> List[EmbeddingConfig]:
-        embeddings = self.embedder.embed([chunk.text for chunk in chunks])
+    def embed(self, chunks: List[ChunkOutput]) -> List[EmbeddingOutput]:
+        embeddings = []
+        for chunk in chunks:
+            embedding = self.embedder.embed(chunk.text)
+            embeddings.append(embedding)
+
+        # embeddings = self.embedder.embed([chunk.text for chunk in chunks])
         return [
-            EmbeddingConfig(vector=embedding, text=chunk.text, metadata=chunk.metadata)
+            EmbeddingOutput(vector=embedding, text=chunk.text, metadata=chunk.metadata)
             for embedding, chunk in zip(embeddings, chunks)
         ]
 
-    def upload(self, embeddings: List[EmbeddingConfig]) -> None:
+    def upload(self, embeddings: List[EmbeddingOutput]) -> None:
         self.vectorstore.upload(embeddings)
 
     def process(self, source: str) -> None:

@@ -1,23 +1,24 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from ..config import VectorStoreConfig, EmbeddingConfig
+from ..embedders import EmbeddingOutput
+from ..config import VectorStoreConfig
 
 class BaseVectorStore(ABC):
     def __init__(self, config: VectorStoreConfig):
         self.config = config
 
     @abstractmethod
-    def upload(self, embeddings: List[EmbeddingConfig]) -> None:
+    def upload(self, embeddings: List[EmbeddingOutput]) -> None:
         """
         Upload a list of embeddings to the vector store.
 
         Args:
-            embeddings (List[EmbeddingConfig]): A list of embeddings to upload.
+            embeddings (List[EmbeddingOutput]): A list of embeddings to upload.
         """
         pass
 
     @abstractmethod
-    def search(self, query_vector: List[float], k: int = 5) -> List[EmbeddingConfig]:
+    def search(self, query_vector: List[float], k: int = 5) -> List[EmbeddingOutput]:
         """
         Search for the k nearest neighbors of the query vector.
 
@@ -26,7 +27,7 @@ class BaseVectorStore(ABC):
             k (int): The number of nearest neighbors to return.
 
         Returns:
-            List[EmbeddingConfig]: A list of the k nearest neighbors.
+            List[EmbeddingOutput]: A list of the k nearest neighbors.
         """
         pass
 

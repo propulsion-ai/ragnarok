@@ -8,7 +8,7 @@ config = RAGnarokConfig(
         embedder_type="openai",
         config={
             "model":"text-embedding-3-small",
-            "api_key":"your_api_key_if_needed",
+            "api_key":"sk-proj-xVfqZvYl7BGizegROFxQT3BlbkFJZEawMMDbZBNppuLnS8Vn",
         }
     ),
     vectorstore=VectorStoreConfig(
@@ -29,4 +29,8 @@ content = rag.extract("sample.pdf")
 for item in content:
     chunks = rag.chunk(item.text, item.metadata)
 
-print(chunks)
+embeddings = rag.embed(chunks)
+
+for embedding in embeddings:
+    print(f"Text: {embedding.text}")
+    print(f"Embedding: {embedding.vector[:50]}")
