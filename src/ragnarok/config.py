@@ -14,12 +14,18 @@ class VectorStoreConfig(BaseModel):
     store_type: str
     config: Optional[Dict[str, Any]] = None
 
+class CrawlingConfig(BaseModel):
+    browser: str = "firefox"
+    depth: int = 0
+    proxies: Optional[List[dict]]
+
 class RAGnarokConfig(BaseModel):
     chunker: Union[ChunkerConfig, Callable[[str], List[str]]] = Field(
         default_factory=lambda: ChunkerConfig(chunker_type="fixed_size", config={"chunk_size": 1000, "overlap": 200})
     )
     embedder: EmbedderConfig
     vectorstore: VectorStoreConfig
+    crawler: CrawlingConfig
 
 class EmbeddingConfig(BaseModel):
     vector: list[float]

@@ -21,7 +21,7 @@ class PDFExtractor(BaseExtractor):
         if self.config.extract_metadata:
             metadata = doc.metadata
 
-        return ExtractorOutput(text=text, metadata=metadata)
+        return [ExtractorOutput(text=text, metadata=metadata)]
 
     @classmethod
     def from_config(cls, config: PDFExtractorConfig) -> "PDFExtractor":

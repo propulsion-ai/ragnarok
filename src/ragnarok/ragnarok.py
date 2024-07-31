@@ -3,8 +3,9 @@ from typing import List, Optional, Tuple, Dict, Any, Callable
 from .config import RAGnarokConfig, EmbeddingConfig
 from .chunkers import get_chunker, ChunkOutput
 from .embedders import get_embedder
-from .vectorstores import initialize_vectorstore
+from .vectorstores import get_vectorstore
 from .extractors import get_extractor, ExtractorOutput
+from .utils import get_source_type
 
 class RAGnarok:
     def __init__(self, config: RAGnarokConfig):
@@ -15,12 +16,11 @@ class RAGnarok:
         else:
             self.chunker = get_chunker(config.chunker.chunker_type, config.chunker.config)
 
-        self.embedder = get_embedder(config.embedder)
-        self.vectorstore = initialize_vectorstore(config.vectorstore)
+        self.embedder = get_embedder(config.embedder.embedder_type, config.embedder.config)
+        self.vectorstore = get_vectorstore(config.vectorstore.store_type, config.vectorstore.config)
 
     def extract(self, source: str) -> ExtractorOutput:
-        file_extension = os.path.splitext(source)[1]
-        extractor = get_extractor(file_extension)
+        extractor = get_extractor(get_source_type(source))
         return extractor.extract(source)
 
     def chunk(self, text: str, metadata: Dict[str, Any]) -> List[ChunkOutput]:
@@ -39,6 +39,7 @@ class RAGnarok:
 
     def process(self, source: str) -> None:
         extracted = self.extract(source)
-        chunks = self.chunk(extracted.text, extracted.metadata)
-        embeddings = self.embed(chunks)
-        self.upload(embeddings)
+        for item in extracted:
+            chunks = self.chunk(item.text, item.metadata)
+            embeddings = self.embed(chunks)
+            self.upload(embeddings)
