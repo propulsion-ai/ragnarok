@@ -4,7 +4,6 @@ from .base import BaseVectorStore
 def get_vectorstore(store_type: str, config: dict) -> BaseVectorStore:
     if store_type == "milvus":
         from .milvus_store import MilvusVectorStore
-
         return MilvusVectorStore.from_config(config)
     # elif store_type == "weaviate":
     #     from .weaviate import WeaviateVectorStore

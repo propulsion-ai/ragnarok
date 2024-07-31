@@ -4,7 +4,7 @@ from typing import Optional, Callable, Union, List, Union
 
 class ChunkerConfig(BaseModel):
     chunker_type: str
-    config: dict
+    config: Optional[dict] = None
 
 class EmbedderConfig(BaseModel):
     embedder_type: str
@@ -12,12 +12,12 @@ class EmbedderConfig(BaseModel):
 
 class VectorStoreConfig(BaseModel):
     store_type: str
-    config: Optional[Dict[str, Any]] = None
+    config: Optional[dict] = None
 
 class CrawlingConfig(BaseModel):
     browser: str = "firefox"
     depth: int = 0
-    proxies: Optional[List[dict]]
+    proxies: Optional[List[dict]] = []
 
 class RAGnarokConfig(BaseModel):
     chunker: Union[ChunkerConfig, Callable[[str], List[str]]] = Field(
@@ -25,7 +25,7 @@ class RAGnarokConfig(BaseModel):
     )
     embedder: EmbedderConfig
     vectorstore: VectorStoreConfig
-    crawler: CrawlingConfig
+    crawler: CrawlingConfig = Field(default_factory=CrawlingConfig)
 
 class EmbeddingConfig(BaseModel):
     vector: list[float]

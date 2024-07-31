@@ -24,7 +24,10 @@ class RAGnarok:
         return extractor.extract(source)
 
     def chunk(self, text: str, metadata: Dict[str, Any]) -> List[ChunkOutput]:
-        chunks = self.chunker(text)
+        if isinstance(self.chunker, Callable):
+            chunks = self.chunker(text)
+        else:
+            chunks = self.chunker.chunk(text)
         return [ChunkOutput(text=chunk, metadata=metadata) for chunk in chunks]
 
     def embed(self, chunks: List[ChunkOutput]) -> List[EmbeddingConfig]:

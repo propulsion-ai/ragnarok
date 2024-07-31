@@ -1,6 +1,5 @@
 from enum import Enum
 from typing import List
-from ..config import EmbedderConfig
 from .base import BaseEmbedder
 from openai import OpenAI
 
@@ -12,8 +11,8 @@ class ModelEnum(Enum):
 class OpenAIEmbedder(BaseEmbedder):
     def __init__(self, config: dict):
         super().__init__(config)
-        self.client = OpenAI(api_key=config.api_key)
-        self.model = ModelEnum(config.embedder_model)
+        self.client = OpenAI(api_key=config["api_key"])
+        self.model = ModelEnum(config["model"])
 
     def embed(self, input_text: str) -> List[float]:
         response = self.client.embeddings.create(

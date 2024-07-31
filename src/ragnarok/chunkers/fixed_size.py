@@ -1,13 +1,11 @@
-from .base import BaseChunker, ChunkerConfig
+from .base import BaseChunker
 from typing import List
 
-class FixedSizeChunkerConfig(ChunkerConfig):
-    chunk_size: int
-    overlap: int
-
 class FixedSizeChunker(BaseChunker):
-    def __init__(self, config: FixedSizeChunkerConfig):
+    def __init__(self, config: dict):
         super().__init__(config)
+        self.chunk_size = config.get('chunk_size', 1000)
+        self.overlap = config.get('overlap', 100)
 
     def chunk(self, text: str) -> List[str]:
         chunks = []
@@ -35,3 +33,7 @@ class FixedSizeChunker(BaseChunker):
             start = split_point - self.overlap  # Move back by overlap amount
 
         return chunks
+    
+    @classmethod
+    def from_config(cls, config: dict) -> 'FixedSizeChunker':
+        return cls(config)
