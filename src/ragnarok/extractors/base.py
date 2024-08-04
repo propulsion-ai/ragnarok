@@ -1,21 +1,22 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
-from pydantic import BaseModel
+from typing import Any, Dict
 
-class ExtractorConfig(BaseModel):
-    """Base configuration for extractors."""
-    pass
+from ..utils.serializable import JSONSerializable
 
-class ExtractorOutput(BaseModel):
+
+class ExtractorOutput(JSONSerializable):
     """
     Standard output format for extractors.
     """
-    text: str
-    metadata: Dict[str, Any] = {}
+
+    def __init__(self, text: str, metadata: Dict[str, Any]):
+        self.text = text
+        self.metadata = metadata
+
 
 class BaseExtractor(ABC):
-    def __init__(self, config: Optional[ExtractorConfig] = None):
-        self.config = config or ExtractorConfig()
+    def __init__(self, config: dict = None):
+        self.config = config
 
     @abstractmethod
     def extract(self, source: Any) -> ExtractorOutput:
@@ -23,7 +24,7 @@ class BaseExtractor(ABC):
         Extract text and metadata from the given source.
 
         Args:
-            source (Any): The source to extract from. This could be a file path, 
+            source (Any): The source to extract from. This could be a file path,
                           URL, or any other identifier for the source.
 
         Returns:
@@ -33,7 +34,7 @@ class BaseExtractor(ABC):
 
     @classmethod
     @abstractmethod
-    def from_config(cls, config: ExtractorConfig) -> 'BaseExtractor':
+    def from_config(cls, config: dict) -> "BaseExtractor":
         """
         Create an extractor instance from a configuration.
 

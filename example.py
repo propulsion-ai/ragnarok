@@ -1,9 +1,11 @@
+import json
 from ragnarok import RAGnarok, RAGnarokConfig, ChunkerConfig, EmbedderConfig, VectorStoreConfig
 
 config = RAGnarokConfig(
-    chunker=ChunkerConfig(
-        chunker_type="fixed_size", config={"chunk_size": 1000, "overlap": 100}
-    ),
+    chunker=None,
+    # chunker=ChunkerConfig(
+    #     chunker_type="fixed_size", config={"chunk_size": 1000, "overlap": 100}
+    # ),
     embedder=EmbedderConfig(
         embedder_type="openai",
         config={
@@ -25,12 +27,16 @@ config = RAGnarokConfig(
 
 rag = RAGnarok(config)
 
-content = rag.extract("sample.pdf")
+content = rag.extract("https://developers.facebook.com/docs/graph-api/")
 for item in content:
     chunks = rag.chunk(item.text, item.metadata)
 
-embeddings = rag.embed(chunks)
+chunks_json = json.dumps([chunk.to_dict() for chunk in chunks], indent=4)
+print(chunks_json)
+# print(chunks)
 
-for embedding in embeddings:
-    print(f"Text: {embedding.text}")
-    print(f"Embedding: {embedding.vector[:50]}")
+# embeddings = rag.embed(chunks)
+
+# for embedding in embeddings:
+#     print(f"Text: {embedding.text}")
+#     print(f"Embedding: {embedding.vector[:50]}")

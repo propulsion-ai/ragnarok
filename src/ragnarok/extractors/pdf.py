@@ -8,7 +8,7 @@ class PDFExtractor(BaseExtractor):
         super().__init__(config)
         self.extract_metadata = config.get("extract_metadata", True)
 
-    def extract(self, source: str) -> ExtractorOutput:
+    def extract(self, source: str, *args, **kwargs) -> ExtractorOutput:
         text, metadata = self.extract_pdf(source)
         metadata["filename"] = os.path.basename(source)
         return [ExtractorOutput(text=text, metadata=metadata)]

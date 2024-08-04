@@ -1,4 +1,4 @@
-from .base import BaseExtractor, ExtractorConfig, ExtractorOutput
+from .base import BaseExtractor, ExtractorOutput
 from .pdf import PDFExtractor
 from .url import URLExtractor
 # from .text import TextExtractor, TextExtractorConfig
@@ -17,7 +17,7 @@ EXTRACTOR_MAP = {
     # '.docx': DocExtractor,
 }
 
-def get_extractor(source_type: str) -> BaseExtractor:
+def get_extractor(source_type: str, *args, **kwargs) -> BaseExtractor:
     """
     Factory function to get the appropriate extractor based on file extension.
     
@@ -38,7 +38,6 @@ def get_extractor(source_type: str) -> BaseExtractor:
 
 __all__ = [
     'BaseExtractor',
-    'ExtractorConfig',
     'ExtractorOutput',
     'PDFExtractor',
     'URLExtractor',
