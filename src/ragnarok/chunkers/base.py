@@ -1,13 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any
-from pydantic import BaseModel, Field
+from typing import Any, Dict, List
+
+from pydantic import BaseModel
+
+from ..utils.serializable import JSONSerializable
+
 
 class ChunkerConfig(BaseModel):
     pass
 
-class ChunkOutput(BaseModel):
-    text: str
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+class ChunkOutput(JSONSerializable):
+    def __init__(self, text: str, metadata: Dict[str, Any]):
+        self.text = text
+        self.metadata = metadata
+
 
 class BaseChunker(ABC):
     def __init__(self, config: ChunkerConfig):

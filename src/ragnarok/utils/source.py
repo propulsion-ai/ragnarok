@@ -15,7 +15,7 @@ def get_source_type(source):
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
     if re.match(url_pattern, source):
-        return "URL"
+        return "url"
     elif os.path.exists(source):
         return os.path.splitext(source)[1]
     else:

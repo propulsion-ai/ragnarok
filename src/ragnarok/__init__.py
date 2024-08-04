@@ -4,6 +4,7 @@ from .config import (
     EmbedderConfig,
     VectorStoreConfig,
     ChunkerConfig,
+    CrawlerConfig,
 )
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "EmbedderConfig",
     "VectorStoreConfig",
     "ChunkerConfig",
+    "CrawlerConfig",
 ]
