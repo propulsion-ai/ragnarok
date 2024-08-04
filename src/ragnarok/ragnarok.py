@@ -1,5 +1,3 @@
-import logging
-import os
 from typing import Any, Callable, Dict, List
 
 from .chunkers import ChunkOutput, get_chunker
@@ -17,10 +15,7 @@ class RAGnarok:
         self.config = config
 
         # Set up logging
-        RAGnarokLogger.setup_logging(
-            level=config.log_level,
-            file_path=config.log_file
-        )
+        RAGnarokLogger.setup_logging(level=config.log_level, file_path=config.log_file)
         self.logger = RAGnarokLogger.get_logger()
 
         if isinstance(config.chunker, Callable):
@@ -42,7 +37,7 @@ class RAGnarok:
         if config.crawler:
             self.crawler = get_crawler(config.crawler.type, config.crawler.config)
 
-    def extract(self, source: str, *args, **kwargs) -> ExtractorOutput:
+    def extract(self, source: str, **kwargs) -> ExtractorOutput:
         source_type = get_source_type(source)
         self.logger.info(f"Extracting {source}: {source_type} ...")
 
@@ -50,12 +45,14 @@ class RAGnarok:
 
         if source_type == "url":
             if not self.crawler:
-                self.logger.warning("No crawler configured. Proceeding with default crawler...")
+                self.logger.warning(
+                    "No crawler configured. Proceeding with default crawler..."
+                )
                 default_config = CrawlerConfig()
                 self.crawler = get_crawler(default_config.type, default_config.config)
-            return extractor.extract(source, crawler=self.crawler, *args, **kwargs)
+            return extractor.extract(source, crawler=self.crawler,**kwargs)
         else:
-            return extractor.extract(source, *args, **kwargs)
+            return extractor.extract(source, **kwargs)
 
     def chunk(self, text: str, metadata: Dict[str, Any]) -> List[ChunkOutput]:
         if isinstance(self.chunker, Callable):
@@ -72,7 +69,6 @@ class RAGnarok:
             embedding = self.embedder.embed(chunk.text)
             embeddings.append(embedding)
 
-        # embeddings = self.embedder.embed([chunk.text for chunk in chunks])
         return [
             EmbeddingOutput(vector=embedding, text=chunk.text, metadata=chunk.metadata)
             for embedding, chunk in zip(embeddings, chunks)
