@@ -3,8 +3,13 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+scratch/
+
 # C extensions
 *.so
+
+# Milvus
+milvus_demo.db
 
 # Distribution / packaging
 .Python
