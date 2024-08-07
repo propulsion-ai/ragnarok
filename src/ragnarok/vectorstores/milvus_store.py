@@ -3,24 +3,24 @@ from pymilvus import MilvusClient
 from ..config import VectorStoreConfig
 
 class MilvusVectorStore:
-    def __init__(self, config: VectorStoreConfig):
+    def __init__(self, config: dict):
         self.config = config
-        self.milvus_config = config.milvus_config or {}
+        self.credentials = config.get("credentials", {})
         
         # Determine if it's a URL or file-based connection
-        connection_type = self.config.credentials.get("connection_type", "file")
+        connection_type = self.credentials.get("connection_type", "file")
         
         if connection_type == "url":
             # URL-based connection
-            uri = self.config.credentials.get("uri", "http://localhost:19530")
-            user = self.config.credentials.get("user", "")
-            password = self.config.credentials.get("password", "")
-            db_name = self.config.credentials.get("db_name", "")
-            token = self.config.credentials.get("token", "")
-            timeout = self.config.credentials.get("timeout")
+            uri = self.credentials.get("uri", "http://localhost:19530")
+            user = self.credentials.get("user", "")
+            password = self.credentials.get("password", "")
+            db_name = self.credentials.get("db_name", "")
+            token = self.credentials.get("token", "")
+            timeout = self.credentials.get("timeout")
             
             # Additional kwargs for MilvusClient
-            extra_kwargs = {k: v for k, v in self.config.credentials.items() 
+            extra_kwargs = {k: v for k, v in self.credentials.items() 
                             if k not in ["uri", "user", "password", "db_name", "token", "timeout", "connection_type"]}
             
             # Initialize MilvusClient with URL-based parameters
@@ -35,12 +35,12 @@ class MilvusVectorStore:
             )
         else:
             # File-based connection (default)
-            file_path = self.config.credentials.get("file_path", "milvus_demo.db")
+            file_path = self.credentials.get("file_path", "milvus_demo.db")
             
             # Initialize MilvusClient with file-based parameter
             self.client = MilvusClient(file_path)
         
-        self.collection_name = config.collection_name
+        self.collection_name = config.get("collection_name", "demo_collection")
 
     def initialize_collection(self):
         if self.client.has_collection(collection_name=self.collection_name):
@@ -48,7 +48,7 @@ class MilvusVectorStore:
         
         self.client.create_collection(
             collection_name=self.collection_name,
-            dimension=self.milvus_config.get("dimension", 768),
+            dimension=self.config.get("dimension", 768),
         )
 
     def insert(self, vectors: List[List[float]], texts: List[str], metadata: List[Dict[str, Any]] = None):
@@ -64,7 +64,7 @@ class MilvusVectorStore:
         return res
 
     @classmethod
-    def from_config(cls, config: VectorStoreConfig) -> 'MilvusVectorStore':
+    def from_config(cls, config: dict) -> 'MilvusVectorStore':
         return cls(config)
 
 # Example usage for URL-based connection:

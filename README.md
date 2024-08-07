@@ -1,6 +1,21 @@
-# RAGnarok ReadMe
+<div align="center">
+ <img src="assets/logo_dark.svg#gh-light-mode-only" width="400px">
+ <img src="assets/logo_light.svg#gh-dark-mode-only" width="400px">
+</div>
 
-## Overview
+<p align="center">
+  <a href="https://twitter.com/propulsion_ai">
+    <img src="https://img.shields.io/badge/twitter-black?logo=x"/>
+  </a>
+  <a href="https://www.linkedin.com/company/propulsionhq">
+    <img src="https://img.shields.io/badge/linkedin-blue?logo=linkedin"/>
+  </a>
+  <a href="https://discord.gg/J4RF7phwYN">
+  <img src="https://img.shields.io/badge/Discord-7289DA?&logo=discord&logoColor=white"/>
+  </a>
+</p>
+
+
 RAGnarok is a powerful and flexible tool for document processing and information retrieval. It allows users to chunk documents, embed chunks using state-of-the-art models, and store embeddings in a vector store for efficient retrieval. This ReadMe provides basic instructions for configuring and using RAGnarok in your projects.
 
 ## Installation

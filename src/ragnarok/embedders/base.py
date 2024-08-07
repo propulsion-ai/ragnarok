@@ -1,13 +1,22 @@
 from abc import ABC, abstractmethod
-from typing import List
-from ..config import EmbedderConfig
+from typing import List, Optional
+
+from ..utils.serializable import JSONSerializable
+
+
+class EmbeddingOutput(JSONSerializable):
+    def __init__(self, vector: List[float], text: str, metadata: Optional[dict] = None):
+        self.vector = vector
+        self.text = text
+        self.metadata = metadata
+
 
 class BaseEmbedder(ABC):
-    def __init__(self, config: EmbedderConfig):
+    def __init__(self, config: dict):
         self.config = config
 
     @abstractmethod
-    def embed(self, texts: List[str]) -> List[List[float]]:
+    def embed(self, texts: List[str]) -> List[float]:
         """
         Embed a list of texts into a list of vector representations.
 
@@ -21,7 +30,7 @@ class BaseEmbedder(ABC):
 
     @classmethod
     @abstractmethod
-    def from_config(cls, config: EmbedderConfig) -> 'BaseEmbedder':
+    def from_config(cls, config: dict) -> "BaseEmbedder":
         """
         Create an embedder instance from a configuration.
 
