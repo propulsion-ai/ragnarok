@@ -1,14 +1,31 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from ..embedders import EmbeddingOutput
 from ..config import VectorStoreConfig
+
+
+from ..utils.serializable import JSONSerializable
+
+
+class VectorStoreOutput(JSONSerializable):
+    """
+    Standard output format for extractors.
+    """
+
+    def __init__(self, text: str, metadata: Dict[str, Any], vector: List[float], id: str, status: str, error: str = None):
+        self.text = text
+        self.metadata = metadata
+        self.vector = vector
+        self.id = id
+        self.status = status
+        self.error = error
 
 class BaseVectorStore(ABC):
     def __init__(self, config: VectorStoreConfig):
         self.config = config
 
     @abstractmethod
-    def upload(self, embeddings: List[EmbeddingOutput]) -> None:
+    def insert(self, embeddings: List[EmbeddingOutput]) -> None:
         """
         Upload a list of embeddings to the vector store.
 
