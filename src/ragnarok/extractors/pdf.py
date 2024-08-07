@@ -1,28 +1,27 @@
 # src/ragnarok/extractors/pdf.py
-from .base import BaseExtractor, ExtractorConfig, ExtractorOutput
-import pymupdf
-
-
-class PDFExtractorConfig(ExtractorConfig):
-    extract_metadata: bool = True
-
+import os
+from .base import BaseExtractor, ExtractorOutput
+import pymupdf as fitz
 
 class PDFExtractor(BaseExtractor):
-    def __init__(self, config: PDFExtractorConfig):
+    def __init__(self, config: dict):
         super().__init__(config)
+        self.extract_metadata = config.get("extract_metadata", True)
 
-    def extract(self, source: str) -> ExtractorOutput:
-        doc = pymupdf.open(source)
-        text = ""
-        for page in doc:
-            text += page.get_text().encode("utf8")
-
-        metadata = {}
-        if self.config.extract_metadata:
-            metadata = doc.metadata
-
-        return ExtractorOutput(text=text, metadata=metadata)
+    def extract(self, source: str, *args, **kwargs) -> ExtractorOutput:
+        text, metadata = self.extract_pdf(source)
+        metadata["filename"] = os.path.basename(source)
+        return [ExtractorOutput(text=text, metadata=metadata)]
 
     @classmethod
-    def from_config(cls, config: PDFExtractorConfig) -> "PDFExtractor":
+    def from_config(cls, config: dict) -> "PDFExtractor":
         return cls(config)
+
+    def extract_pdf(self, file):
+        metadata = {}
+        text = ""
+        with fitz.open(file, filetype="pdf") as doc:
+            metadata = doc.metadata
+            for page in doc:
+                text += page.get_text()
+        return text, metadata

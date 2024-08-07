@@ -10,3 +10,8 @@ pymilvus
 
 # For pdf parsing
 pymupdf
+beautifulsoup4
+markdownify
+langdetect
+playwright
+psutil
