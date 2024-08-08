@@ -74,12 +74,12 @@ class RAGnarok:
             for embedding, chunk in zip(embeddings, chunks)
         ]
 
-    def upload(self, embeddings: List[EmbeddingOutput]) -> None:
-        self.vectorstore.upload(embeddings)
+    def insert(self, embeddings: List[EmbeddingOutput]) -> None:
+        self.vectorstore.insert(embeddings)
 
     def process(self, source: str) -> None:
         extracted = self.extract(source)
         for item in extracted:
             chunks = self.chunk(item.text, item.metadata)
             embeddings = self.embed(chunks)
-            self.upload(embeddings)
+            self.insert(embeddings)
