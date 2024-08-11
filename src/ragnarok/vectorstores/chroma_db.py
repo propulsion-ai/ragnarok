@@ -4,7 +4,7 @@ from typing import List
 import chromadb
 from chromadb.config import Settings
 
-from ragnarok.config import VectorStoreConfig
+from ..config import VectorStoreConfig
 
 from ..embedders import EmbeddingOutput
 from .base import BaseVectorStore, VectorStoreOutput
@@ -16,6 +16,22 @@ class ChromaVectorStore(BaseVectorStore):
 
         # Determine if it's a URL or file-based connection
         connection_type = self.credentials.get("connection_type", "file")
+        
+        
+        # Additional kwargs for client
+        extra_kwargs = {
+            k: v
+            for k, v in self.credentials.items()
+            if k
+            not in [
+                "host",
+                "port",
+                "ssl",
+                "headers",
+                "settings",
+                "connection_type",
+            ]
+        }
 
         if connection_type == "url":
             # URL-based connection
@@ -24,20 +40,7 @@ class ChromaVectorStore(BaseVectorStore):
             ssl = self.credentials.get("ssl", False)
             headers = self.credentials.get("headers", {})
 
-            # Additional kwargs for client
-            extra_kwargs = {
-                k: v
-                for k, v in self.credentials.items()
-                if k
-                not in [
-                    "host",
-                    "port",
-                    "ssl",
-                    "headers",
-                    "settings",
-                    "connection_type",
-                ]
-            }
+            
 
             settings = self.credentials.get("settings", Settings(**extra_kwargs))
 
@@ -53,19 +56,18 @@ class ChromaVectorStore(BaseVectorStore):
 
         else:
             # File-based connection (default)
-            file_path = self.credentials.get("file_path", "milvus_demo.db")
+            file_path = self.credentials.get("file_path", "./chroma")
+            
             settings = self.credentials.get("settings", Settings(**extra_kwargs))
 
             self.client = chromadb.PersistentClient(path=file_path, settings=settings)
 
         self.collection_name = config.get("collection_name", "demo_collection")
+        self.initialize_collection()
 
     
     def initialize_collection(self):
-        if self.collection_name in self.client.list_collections():
-            self.client.drop_collection(collection_name=self.collection_name)
-
-        self.client.create_collection(
+        self.client.get_or_create_collection(
             name=self.collection_name
         )
     
@@ -76,7 +78,7 @@ class ChromaVectorStore(BaseVectorStore):
                 name=self.collection_name
             )
             try:
-                collection.add(embeddings=embedding)
+                collection.add(ids = embedding.metadata.get("id", str(uuid.uuid4())), embeddings=embedding)
             except ValueError:
                 result.append(
                     VectorStoreOutput(
@@ -94,7 +96,7 @@ class ChromaVectorStore(BaseVectorStore):
                     text=embedding.text,
                     metadata=embedding.metadata,
                     vector=embedding.vector,
-                    id=id,
+                    id=embedding.metadata.get("id", str(uuid.uuid4())),
                     status="success",
                 )
             )
