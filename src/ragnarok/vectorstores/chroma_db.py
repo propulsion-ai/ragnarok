@@ -1,5 +1,5 @@
 import uuid
-from typing import Any, Dict, List
+from typing import List
 
 import chromadb
 from chromadb.config import Settings
@@ -19,7 +19,7 @@ class ChromaVectorStore(BaseVectorStore):
 
         if connection_type == "url":
             # URL-based connection
-            uri = self.credentials.get("uri", "localhost")
+            uri = self.credentials.get("host", "localhost")
             port = self.credentials.get("port", "8000")
             ssl = self.credentials.get("ssl", False)
             headers = self.credentials.get("headers", {})
@@ -30,7 +30,7 @@ class ChromaVectorStore(BaseVectorStore):
                 for k, v in self.credentials.items()
                 if k
                 not in [
-                    "uri",
+                    "host",
                     "port",
                     "ssl",
                     "headers",
