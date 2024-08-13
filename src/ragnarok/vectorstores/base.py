@@ -12,7 +12,7 @@ class VectorStoreOutput(JSONSerializable):
     Standard output format for extractors.
     """
 
-    def __init__(self, text: str, metadata: Dict[str, Any], vector: List[float], id: str, status: str, error: str = None):
+    def __init__(self, text: str, metadata: Dict[str, Any], vector: List[float], id: str, status: str, error: Optional[str]):
         self.text = text
         self.metadata = metadata
         self.vector = vector
@@ -21,6 +21,7 @@ class VectorStoreOutput(JSONSerializable):
         self.error = error
 
 class BaseVectorStore(ABC):
+
     def __init__(self, config: VectorStoreConfig):
         self.config = config
 
