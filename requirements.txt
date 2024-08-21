@@ -8,6 +8,15 @@ protobuf==3.20.0
 grpcio-tools
 pymilvus
 
+# For pinecone
+pinecone-client==5.0.1
+
+# For testing
+python-dotenv
+pytest
+coverage
+pytest-cov
+
 # For pdf parsing
 pymupdf
 beautifulsoup4

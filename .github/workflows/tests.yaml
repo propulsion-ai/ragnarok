@@ -1,0 +1,20 @@
+name: "Unit tests"
+
+on:
+  workflow_dispatch:
+
+env:
+  OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
+  PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+
+jobs:
+  test-pinecone-store:
+    runs_on: ubuntu-latest
+    steps:
+      - name: "Checkout repository onto runner"
+        uses: actions/checkout@main
+
+      - name: "Run pinecone store tests"
+        run: |
+          cd tests
+          pytest test_pinecone_store.py
