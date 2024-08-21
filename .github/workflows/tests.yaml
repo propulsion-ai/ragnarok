@@ -1,0 +1,40 @@
+name: "Unit tests"
+
+on:
+  workflow_dispatch:
+
+env:
+  OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
+  PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+  MILVUS_STORE_URI: ${{ secrets.MILVUS_STORE_URI }}
+  MILVUS_STORE_USER: ${{ secrets.MILVUS_STORE_USER }}
+  MILVUS_STORE_PASSWORD: ${{ secrets.MILVUS_STORE_PASSWORD }}
+  MILVUS_STORE_DB_NAME: ${{ secrets.MILVUS_STORE_DB_NAME }}
+  MILVUS_STORE_TOKEN: ${{ secrets.MILVUS_STORE_TOKEN }}
+  MILVUS_STORE_TIMEOUT: ${{ secrets.MILVUS_STORE_TIMEOUT }}
+
+jobs:
+  test-pinecone-store:
+    runs_on: ubuntu-latest
+    steps:
+      - name: "Checkout repository onto runner"
+        uses: actions/checkout@main
+
+      - name: "Run pinecone store tests"
+        run: |
+          cd tests
+          pytest -q test_pinecone_store.py
+
+  test-milvus-store:
+    runs_on: ubuntu-latest
+    steps:
+      - name: "Checkout repository onto runner"
+        uses: actions/checkout@main
+
+      - name: "Run milvus store tests"
+        run: |
+          cd tests
+          pytest -q test_milvus_store.py
+          
+
+
